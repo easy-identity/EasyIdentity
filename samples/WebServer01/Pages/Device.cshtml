@@ -1,0 +1,27 @@
+﻿@page
+@model WebServer01.Pages.DeviceModel
+@{
+}
+
+<div class="container">
+    <main b-5nwewv8wif="" role="main" class="pb-3">
+
+        <h1>Device Login</h1>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div asp-validation-summary="All"></div>
+                <form method="post" novalidate="novalidate" asp-page-handler="validateCode">
+                    <h3>Please input device code</h3>
+                    <hr>
+                    <div class="form-floating mb-3">
+                        <input class="form-control" asp-for="Code">
+                        <label asp-for="Code"></label>
+                    </div>
+                    <button type="submit" class="w-100 btn btn-lg btn-primary">Submit</button>
+                </form>
+            </div>
+
+        </div>
+    </main>
+</div>
