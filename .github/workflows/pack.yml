@@ -1,0 +1,81 @@
+﻿name: release
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+  workflow_dispatch:
+    inputs:
+      push_nuget:
+        description: "NuGet"
+        required: true
+        type: boolean
+        default: true
+      # is_bate_version:
+      #   description: "is bate version"
+      #   required: true
+      #   type: boolean
+      #   default: true
+
+env:
+  PUSH_DOCKER: ${{ inputs.push_docker || 'false' }}
+  PUSH_NUGET: ${{ inputs.push_nuget || 'false' }}
+  PUSH_RELEASE: ${{ inputs.push_release || 'false' }}
+  BATE_VERSION: ${{ inputs.is_bate_version || 'false' }}
+  DEFAULT_VERSION: "0.1.0"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+            8.0.x
+
+      - name: Install Dotnet Tool
+        run: |
+          dotnet tool install -g Passingwind.Git-CI-Tools
+          gitci --version
+
+      - name: Set environment variables
+        uses: rlespinasse/github-slug-action@3.6.0
+
+      - name: Version check and generate
+        run: |
+          gitci release changes --output ./changeslog.md
+          gitci version next --format json --output ./version.json --build-ver "${{env.GITHUB_SHA_SHORT}}" --default-version "${{env.DEFAULT_VERSION}}" 
+          ls ./
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore -c Release
+
+      # - name: Pack
+      #   run: |
+      #     dotnet pack --include-symbols -c Release --property:PackageOutputPath=${{github.workspace}}/pack_output ./Sample.sln
+
+      # - name: Push package
+      #   if: ${{ env.PUSH_NUGET == 'true' }}
+      #   run: dotnet nuget push ./pack_output/*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TOKEN}} --source https://api.nuget.org/v3/index.json
+
+      # - name: Create Release
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     tag: v${{env.GITCI_NEXT_VERSION}}
+      #     artifacts: ./*.nupkg, ./changeslog*
+      #     bodyFile: ./changeslog.md
+      #     prerelease: false
+      #     token: ${{ secrets.GITHUB_TOKEN }}

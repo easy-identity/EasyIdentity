@@ -1,11 +1,11 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using EasyIdentity.Endpoints.Results;
+﻿using EasyIdentity.Endpoints.Results;
 using EasyIdentity.Models;
 using EasyIdentity.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace EasyIdentity.Endpoints;
 

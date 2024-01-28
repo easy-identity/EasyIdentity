@@ -54,6 +54,7 @@ public static class ServiceCollectionExtensions
         builder.AddEndpointHandler<JwksEndpointHandler>();
         builder.AddEndpointHandler<TokenEndpointHandler>();
         builder.AddEndpointHandler<UserinfoEndpointHanlder>();
+        builder.AddEndpointHandler<TokenIntrospectionEndpointHandler>();
     }
 
     private static void AddEndpointResultExecutor(EasyIdentityOptionBuilder builder)
@@ -71,5 +72,6 @@ public static class ServiceCollectionExtensions
         builder.AddEndpointResultExecutor<TokenResult, TokenResultExecutor>();
         builder.AddEndpointResultExecutor<UnauthenticatedResult, UnauthenticatedResultExecutor>();
         builder.AddEndpointResultExecutor<UserInfoResult, UserInfoResultExecutor>();
+        builder.AddEndpointResultExecutor<TokenIntrospectionResult, TokenIntrospectionResultExecutor>();
     }
 }
