@@ -15,9 +15,16 @@
     <RepositoryUrl>https://github.com/easy-identity/easy-identity-core.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>oidc, identity server</PackageTags>
-    <PackageLicenseExpression>LGPL</PackageLicenseExpression>
+    <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <Description>A OIDC and OAuth 2.0 framework</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Authors>Passingwind</Authors>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" PrivateAssets="All" />

@@ -1,10 +1,10 @@
 ﻿name: release
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  # push:
+  #   branches: [main]
+  # pull_request:
+  #   branches: [main]
 
   workflow_dispatch:
     inputs:
@@ -63,19 +63,20 @@ jobs:
       - name: Build
         run: dotnet build --no-restore -c Release
 
-      # - name: Pack
-      #   run: |
-      #     dotnet pack --include-symbols -c Release --property:PackageOutputPath=${{github.workspace}}/pack_output ./Sample.sln
+      - name: Pack
+        run: |
+          dotnet pack --include-symbols -c Release --property:PackageOutputPath=${{github.workspace}}/pack_output
 
-      # - name: Push package
-      #   if: ${{ env.PUSH_NUGET == 'true' }}
-      #   run: dotnet nuget push ./pack_output/*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TOKEN}} --source https://api.nuget.org/v3/index.json
+      - name: Push package
+        if: ${{ env.PUSH_NUGET == 'true' }}
+        run: dotnet nuget push ./pack_output/*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_TOKEN}} --source https://api.nuget.org/v3/index.json
 
-      # - name: Create Release
-      #   uses: ncipollo/release-action@v1
-      #   with:
-      #     tag: v${{env.GITCI_NEXT_VERSION}}
-      #     artifacts: ./*.nupkg, ./changeslog*
-      #     bodyFile: ./changeslog.md
-      #     prerelease: false
-      #     token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release
+        if: ${{ env.PUSH_RELEASE == 'true' }}
+        uses: ncipollo/release-action@v1
+        with:
+          tag: v${{env.GITCI_NEXT_VERSION}}
+          artifacts: ./*.nupkg, ./changeslog*
+          bodyFile: ./changeslog.md
+          prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }}
